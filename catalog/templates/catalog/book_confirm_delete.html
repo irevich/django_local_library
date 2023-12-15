@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<h1>Delete Book</h1>
+
+{% if book.bookinstance_set.all %}
+
+<p>You can't delete this book until all their instances have been deleted:</p>
+<ul>
+  {% for bookinstance in book.bookinstance_set.all %}
+    <li><a href="{% url 'book-detail' bookinstance.book.pk %}">{{ bookinstance.book.title }}</a> ({{ bookinstance.due_back }}) {% if bookinstance.borrower %} - {{bookinstance.borrower.username}} {% endif %}</li>
+  {% endfor %}
+</ul>
+
+{% else %}
+<p>Are you sure you want to delete the book:  {{ book }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete.">
+</form>
+{% endif %}
+
+{% endblock %}
